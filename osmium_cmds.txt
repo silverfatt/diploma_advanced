@@ -1,0 +1,24 @@
+osmium tags-filter additional_data/russia-260422.osm.pbf w/highway=motorway w/highway=trunk w/highway=primary w/highway=secondary -o additional_data/roads_filtered.osm.pbf
+
+osmium tags-filter additional_data/russia-260422.osm.pbf n/railway=station n/railway=halt -o additional_data/railway_stations.osm.pbf
+
+# Фильтруем только границы уровня "субъект РФ" (admin_level=4)
+osmium tags-filter additional_data/russia-260422.osm.pbf \
+  r/admin_level=4 \
+  -o additional_data/russia_regions.osm.pbf
+
+# Конвертируем в GeoJSON для удобной работы в Python
+osmium export additional_data/russia_regions.osm.pbf \
+  -f geojson \
+  -o additional_data/russia_regions.geojson
+
+
+# Фильтруем только крупные водотоки
+osmium tags-filter additional_data/russia-260422.osm.pbf \
+  "w/waterway=river" \
+  -o additional_data/rivers.osm.pbf
+
+# Конвертируем в GeoJSON для Python
+osmium export additional_data/rivers.osm.pbf \
+  -f geojson \
+  -o additional_data/rivers.geojson
